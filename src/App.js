@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from "react";
 import { Route, Link, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import axios from 'axios'
+import formSchema from './formSchema'
+import * as yup from 'yup'
+import PizzaForm from './PizzaForm'
+import HomePage from './Homepage'
 
 const StyledHeader = styled.header``
 const StyledDivMain = styled.div``
@@ -28,6 +31,10 @@ const initialValues = {
   },
 }
 
+const initalErrors = {
+  name: '',
+}
+
 const initalPizzas = []
 const initialDisabled = true
 
@@ -37,6 +44,7 @@ const App = () => {
   const [values, setValues] = useState(initialValues)
   const [disabled, setDisabled] = useState(initialDisabled)
   const [pizzas, setPizzas] = useState(initalPizzas)
+  const [errors, setErrors] = useState(initalErrors)
 
 
 
@@ -45,6 +53,27 @@ const App = () => {
     setPizzas([...pizzas, newPizza])
     console.log(pizzas)
 
+  }
+  
+  const inputChange = (name, value) => {
+    yup
+    .reach(formSchema, name)
+    .validate(value)
+    .then(valid => {
+      setErrors({
+        ...errors, [name]: ''
+      })
+    })
+    .catch(err => {
+      setErrors({
+        ...errors, [name]: err.errors[0]
+      })
+    })
+
+    setValues({
+      ...values,
+      [name]: value
+    })
   }
 
   const checkBox = (name, checked) => {
@@ -61,66 +90,45 @@ const App = () => {
       name: values.name.trim(),
       size: values.size,
       sauce: values.sauce,
+      toppings: Object.keys(values.toppings).filter(top => values.toppings[top])
     }
+
     postNewPizza( newPizza )
 
   }
 
-  
 
-  useEffect(() => {}, [values])
+
+  useEffect(() => {
+    formSchema.isValid(values)
+      .then(valid => {
+        setDisabled(!valid);
+      }
+    )}, [values])
 
   return (
     <>
-      <header>
-        <h1>Lambda Eats</h1>
-        <nav>
-          <Link to = '/'>Home</Link >
-          <Link to = '/help'>Help</Link >
-        </nav>
-      </header>
+      <Switch>
 
-      <div id = 'main-body'>
-        <h2>Why not eat while coding?</h2>
-        <Link to = '/pizza'>Pizza!!</Link>
-      </div>
-
-      <div id = 'fake-food'>
-
-        <div id = 'burger'>
-            <div class = 'img-container'>
-              <img src = 'https://images.unsplash.com/photo-1508736793122-f516e3ba5569?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt = '' height = '250px' ></img>
-            </div>
-            <p>Durger's Burgers</p>
-            <p>$ - American - Burgers</p>
-        </div>
-
-        <div id = 'sushi'>
-            <div class = 'img-container'>
-              <img src = 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt = '' height = '250px'></img>
-            </div>
-          <p>Sushi Barr</p>
-          <p>$$ - Japanese - Sushi</p>
-        </div>
-
-        <div>
-          <div>
-            <img src = 'https://images.unsplash.com/photo-1587339144367-f1cacbecac82?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt = '' height = '250'></img>
-          </div>
-          <p>Pancake King</p>
-          <p>$ - American - Breakfest</p>
-        </div>
-
-      </div>
+        <Route path = '/pizza'>
+          <PizzaForm 
+                values = {values}
+                checkbox = {checkBox}
+                submit = {submit}
+                disabled = {disabled}
+                errors = {errors}
+                change = {inputChange} 
+                />
+        </Route>
+        
 
       <Route path = '/'>
-        {/* HomePage */}
+        <HomePage /> 
+
+             
       </Route>
 
-      <Route path = '/pizza'>
-        {/* Pizza Form */}
-      </Route>
-
+      </Switch>
     </>
   );
 };
