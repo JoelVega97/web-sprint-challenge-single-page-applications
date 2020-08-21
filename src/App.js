@@ -6,11 +6,10 @@ import * as yup from 'yup'
 import PizzaForm from './PizzaForm'
 import HomePage from './Homepage'
 
-const StyledHeader = styled.header``
-const StyledDivMain = styled.div``
-const StyledDivFake = styled.div``
 
-//Empty From Values
+
+
+//Empty Form Values
 
 const initialValues = {
 
@@ -19,8 +18,6 @@ const initialValues = {
   name: '',
   //Dropdown Values
   size: '',
-  //Radio
-  sauce: '',
   //Checkboxes
   toppings: {
     pepperoni: false,
@@ -33,6 +30,7 @@ const initialValues = {
 
 const initalErrors = {
   name: '',
+  size: ''
 }
 
 const initalPizzas = []
@@ -52,6 +50,7 @@ const App = () => {
 
     setPizzas([...pizzas, newPizza])
     console.log(pizzas)
+    setValues(initialValues)
 
   }
   
@@ -78,8 +77,11 @@ const App = () => {
 
   const checkBox = (name, checked) => {
     setValues({
-      ...values, 
-      [name]: checked
+      ...values,
+      toppings: {
+        ...values.toppings,
+        [name]: checked,
+      }
     })
   }
 
