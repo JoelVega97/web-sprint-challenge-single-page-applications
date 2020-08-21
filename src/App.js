@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import { Route, Link, Switch } from 'react-router-dom'
-import styled from 'styled-components'
 import formSchema from './formSchema'
 import * as yup from 'yup'
 import PizzaForm from './PizzaForm'
 import HomePage from './Homepage'
+//import Order from './Order'
 
 
 
@@ -49,7 +49,6 @@ const App = () => {
   const postNewPizza = newPizza => {
 
     setPizzas([...pizzas, newPizza])
-    console.log(pizzas)
     setValues(initialValues)
 
   }
@@ -112,6 +111,10 @@ const App = () => {
     <>
       <Switch>
 
+        <Route path = '/pizza/order'>
+          {/* <Order details = {pizzas} /> */}
+        </Route>
+
         <Route path = '/pizza'>
           <PizzaForm 
                 values = {values}
@@ -125,9 +128,7 @@ const App = () => {
         
 
       <Route path = '/'>
-        <HomePage /> 
-
-             
+        <HomePage />              
       </Route>
 
       </Switch>

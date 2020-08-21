@@ -1,5 +1,69 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import styled from 'styled-components'
+
+const StyledDiv = styled.div`
+
+ background-color: #FFF275;
+
+ header{
+     display:flex;
+     background-color: #FF3C38;
+     padding-top: 2%;
+     align-items: center;
+     justify-content:space-around
+ }
+
+ h1{
+     font-size: 3.0rem;
+ }
+
+ nav a{
+     text-decoration: none;
+     font-size: 1.8rem;
+     margin: 15%;
+     color: black;
+ }
+
+ #form-top{
+     text-align: center;
+     font-size: 1.55rem;
+ }
+
+ .before-input{
+     display: flex;
+     justify-content: space-between;
+     flex-direction:column;
+     padding-left: 3%;
+ }
+
+ .before-input h3{
+     font-size: 1.6rem;
+ }
+
+ .before-input p{
+     font-size: 1.4rem;
+ }
+
+ .input-container{
+    margin: 3% 3%;
+ }
+
+ #toppings{
+    display: flex;
+    flex-direction:column;
+ }
+
+ #toppings label{
+    font-size: 1.3rem;
+ }
+
+ button{
+     margin: 3%;
+ }
+
+`
+
 
 export default function PizzaForm(props){
     const {values, checkbox, submit, disabled, errors, change} = props
@@ -21,7 +85,7 @@ export default function PizzaForm(props){
 
     return (
         <>
-
+    <StyledDiv>
         <header>
             <h1>Lambda Eats</h1>
             <nav>
@@ -151,9 +215,12 @@ export default function PizzaForm(props){
                     </label>
                 </div>
 
-                <button disabled = {disabled}>Order Now!</button>
+                <button disabled = {disabled}>
+                    <p>Order Now!</p>
+                    </button>
 
         </form>
+    </StyledDiv>
         </>
     )
 
